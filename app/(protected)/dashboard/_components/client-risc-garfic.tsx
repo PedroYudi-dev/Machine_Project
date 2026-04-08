@@ -1,16 +1,11 @@
 'use client'
-import { Pie, PieChart, PieLabelRenderProps, PieSectorShapeProps, ResponsiveContainer, Sector } from 'recharts';
+import { useEffect, useState } from 'react';
+import { Pie, PieChart, PieLabelRenderProps, PieSectorShapeProps, Legend , ResponsiveContainer, Sector } from 'recharts';
 import { RechartsDevtools } from '@recharts/devtools';
+import { getResumeDashBoardRisc } from '../action/get-grafic';
+import { PieData } from '@/types/pie-data';
 
-// #region Sample data
-const data = [
-  { name: 'Group A', value: 400 },
-  { name: 'Group B', value: 300 },
-  { name: 'Group C', value: 300 },
-  { name: 'Group D', value: 200 },
-];
 
-// #endregion
 const RADIAN = Math.PI / 180;
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
@@ -36,6 +31,24 @@ const MyCustomPie = (props: PieSectorShapeProps) => {
 };
 
 export default function ClientRiscGrafic({ isAnimationActive = true }: { isAnimationActive?: boolean }) {
+  const [data, setData] = useState<PieData[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getResumeDashBoardRisc();
+        const res = response.data
+        setData([
+          {name: "Alto Risco", value: res.alto_risco},
+          {name: "Baixo Risco", value: res.baixo_risco},
+        ])
+      } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <div className="h-[360px] w-[900px] max-w-full">
       <ResponsiveContainer width="100%" height="100%">
@@ -49,6 +62,7 @@ export default function ClientRiscGrafic({ isAnimationActive = true }: { isAnima
             isAnimationActive={isAnimationActive}
             shape={MyCustomPie}
           />
+          <Legend/>
           <RechartsDevtools />
         </PieChart>
       </ResponsiveContainer>

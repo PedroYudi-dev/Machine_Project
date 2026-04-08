@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
   BarChart,
   Bar,
@@ -8,16 +9,32 @@ import {
   ResponsiveContainer,
   LabelList,
 } from "recharts";
+import { getTopClients } from "../action/get-top-clients";
 
-const data = [
-  { label: "7590-VHVEG", value: 0.85 },
-  { label: "5575-GNVDE", value: 0.78 },
-  { label: "3668-QPYBK", value: 0.72 },
-  { label: "7795-CFOCW", value: 0.65 },
-  { label: "9237-HQITU", value: 0.61 },
-];
+type BarData = {
+  label: string;
+  value: number;
+};
 
 export function TopClientesRisco() {
+  const [data, setData] = useState<BarData[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getTopClients();
+        const res = response.data;
+        setData(res.map((item: any)=>({
+          label: item.customerID,
+          value: item.probabilidade_churn
+        })));
+      } catch (error) {
+        console.error("Error fetching top clients data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <div className="h-[360px] w-[900px] max-w-full">
       <ResponsiveContainer width="100%" height={300}>

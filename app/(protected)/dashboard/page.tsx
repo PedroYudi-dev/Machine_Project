@@ -1,6 +1,5 @@
 
 import { DataTable } from "@/components/data-table";
-import { SiteHeader } from "@/components/site-header";
 
 import data from "./data.json";
 import { TopClientesRisco } from "./_components/client-list-top-risc";
@@ -16,7 +15,7 @@ export default function Dashboard() {
             <div className="px-4 lg:px-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Clientes em risco</CardTitle>
+                  <CardTitle>Total, % alto, % baixo</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <ClientRiscGrafic />
@@ -26,7 +25,7 @@ export default function Dashboard() {
             <div className="px-4 lg:px-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Top 10 clientes</CardTitle>
+                  <CardTitle>Top 10 clientes com maior risco</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <TopClientesRisco />
