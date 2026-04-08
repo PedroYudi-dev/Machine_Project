@@ -1,15 +1,15 @@
 "use client"
 
 import * as React from "react"
-import { useForm, Controller } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { FormValues } from "@/types/formClient"
 import { createForm } from "../action/createForm"
+import RadioField from "@/hooks/radio-field-hook"
 
 
 type Resultado = {
@@ -18,41 +18,6 @@ type Resultado = {
   acao: string
 }
 
-function RadioField({
-  label,
-  name,
-  options,
-  control,
-}: {
-  label: string
-  name: keyof FormValues
-  options: { label: string; value: string }[]
-  control: any
-}) {
-  return (
-    <div className="flex flex-col gap-2">
-      <span className="text-sm font-medium text-gray-700">{label}</span>
-      <Controller
-        name={name}
-        control={control}
-        render={({ field }) => (
-          <RadioGroup
-            value={field.value}
-            onValueChange={field.onChange}
-            className="flex flex-wrap gap-4"
-          >
-            {options.map((opt) => (
-              <div key={opt.value} className="flex items-center gap-2">
-                <RadioGroupItem value={opt.value} id={`${name}-${opt.value}`} />
-                <Label htmlFor={`${name}-${opt.value}`}>{opt.label}</Label>
-              </div>
-            ))}
-          </RadioGroup>
-        )}
-      />
-    </div>
-  )
-}
 
 export default function FormCliente() {
   const { control, register, handleSubmit } = useForm<FormValues>()
@@ -83,19 +48,18 @@ export default function FormCliente() {
         <CardDescription>Preencha os dados do cliente para prever o risco de cancelamento</CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8 ">
 
           {/* DADOS PESSOAIS */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 justify-center items-center">
             <h3 className="font-semibold text-base border-b pb-2">Dados Pessoais</h3>
-            <RadioField label="Senior Citizen" name="SeniorCitizen" control={control}
-              options={[{ label: "Sim", value: "1" }, { label: "Não", value: "0" }]} />
-            <RadioField label="Possui Parceiro?" name="Partner" control={control} options={simNao} />
-            <RadioField label="Possui Dependentes?" name="Dependents" control={control} options={simNao} />
+              <RadioField label="Senior Citizen" name="SeniorCitizen" control={control} options={[{ label: "Sim", value: "1" }, { label: "Não", value: "0" }]} />
+              <RadioField label="Possui Parceiro?" name="Partner" control={control} options={simNao} />
+              <RadioField label="Possui Dependentes?" name="Dependents" control={control} options={simNao} />
           </div>
 
           {/* SERVIÇOS CONTRATADOS */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 jusit">
             <h3 className="font-semibold text-base border-b pb-2">Serviços Contratados</h3>
             <RadioField label="Múltiplas Linhas" name="MultipleLines" control={control}
               options={[{ label: "Sim", value: "Yes" }, { label: "Não", value: "No" }, { label: "Sem telefone", value: "No phone service" }]} />
@@ -110,7 +74,7 @@ export default function FormCliente() {
           </div>
 
           {/* CONTRATO E PAGAMENTO */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 jusit">
             <h3 className="font-semibold text-base border-b pb-2">Contrato e Pagamento</h3>
             <RadioField label="Tipo de Contrato" name="Contract" control={control}
               options={[{ label: "Mensal", value: "Month-to-month" }, { label: "1 Ano", value: "One year" }, { label: "2 Anos", value: "Two year" }]} />
